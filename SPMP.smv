@@ -1,0 +1,39 @@
+MODULE main
+VAR
+    state: {s0, s1, s2, s3, s4, s5, s6, UP, end};
+    VCP: {High, Low};
+    VOP: {High, Low};
+    TR: {High, Low};
+
+ASSIGN
+    init(state) := s0;
+    next(state) := case
+        -- Transitions from s0
+        state = s0 & VCP = High : s1;
+        state = s0 & VCP = Low  : s2;
+
+        -- Transitions from s1
+        state = s1 & VOP = High : s3;
+        state = s1 & VOP = Low  : s4;
+
+        -- s3 and s4 always go to UP
+        state = s3 : UP;
+        state = s4 : UP;
+
+        -- Transitions from s2
+        state = s2 & VOP = High : s5;
+        state = s2 & VOP = Low  : s6;
+
+        -- s5 and s6 never go to UP; stay in the same state
+        state = s5 : s5;
+        state = s6 : s6;
+
+        -- UP goes to end
+        state = UP : end;
+        state = end : end;
+
+        -- Default: stay in current state
+        TRUE : state;
+    esac;
+
+SPEC AG ((VCP_label_Up = Low & VOP_label_Up = Low & TR_label_Low = High) → AX(state = Up))

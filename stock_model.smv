@@ -1,0 +1,29 @@
+MODULE main
+VAR
+    state : {s0, s1, s10, s11, s12, s13, s14, s15, s2, s3, s4, s5, s6, s7, s8, s9};
+
+ASSIGN
+    init(state) := s0;
+    next(state) := case
+        state = s0 : {s12, s9, s8, s1, s0};
+        state = s1 : {s9, s7, s8, s1, s2, s0};
+        state = s2 : {s12, s6, s4, s3, s2, s5};
+        state = s3 : {s11, s6, s10, s4, s7, s3, s1, s8, s2, s5};
+        state = s4 : {s12, s6, s7, s4, s3, s2, s5};
+        state = s5 : {s11, s6, s7, s4, s3, s2, s5};
+        state = s6 : {s6, s4, s3, s2, s5};
+        state = s7 : {s7, s4, s3, s2, s5};
+        state = s8 : {s10, s9, s8, s1, s0};
+        state = s9 : {s9, s0, s8, s1};
+        state = s10 : {s11, s12, s14, s13, s10, s15, s2, s5};
+        state = s11 : {s11, s12, s14, s13, s10, s15, s5};
+        state = s12 : {s11, s12, s14, s13, s10, s3, s15};
+        state = s13 : {s11, s12, s14, s13, s10};
+        state = s14 : {s11, s12, s14, s13, s10};
+        state = s15 : {s12, s13, s10, s4, s8, s15};
+        TRUE : state;
+    esac;
+
+-- CTL Specifications
+CTLSPEC AG((state = s4 | state = s2 | state = s0 | state = s6) -> AX(state = s11 | state = s12 | state = s14 | state = s13 | state = s6 | state = s10 | state = s9 | state = s4 | state = s7 | state = s15 | state = s3 | state = s1 | state = s8 | state = s2 | state = s0 | state = s5))
+CTLSPEC AG((state = s9 | state = s1) -> AX(state = s11 | state = s12 | state = s14 | state = s13 | state = s6 | state = s10 | state = s9 | state = s4 | state = s7 | state = s15 | state = s3 | state = s1 | state = s8 | state = s2 | state = s0 | state = s5))
